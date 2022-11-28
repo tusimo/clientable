@@ -1,0 +1,42 @@
+{
+  "name": "tusimo/clientable",
+  "description": "api http client",
+  "type": "library",
+  "keywords": ["api http client  service tool"],
+  "homepage": "https://github.com/tusimo/clientable",
+  "license": "MIT",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "require": {
+    "php": "^7|^8",
+    "tusimo/restable": "dev-master",
+    "guzzlehttp/guzzle": "^6|^7",
+    "illuminate/support": "^6|^7|^8|^9",
+    "illuminate/pagination": "^6|^7|^8|^9"
+  },
+  "require-dev": {
+    "friendsofphp/php-cs-fixer": "^3.0",
+    "phpunit/phpunit": "^9.5",
+    "phpstan/phpstan": "^1.8",
+    "squizlabs/php_codesniffer": "^3.7"
+  },
+  "scripts": {
+    "test": "phpunit --prepend test/bootstrap.php -c phpunit.xml --colors=always",
+    "cs-fix": "phpcbf --standard=phpcs.xml --colors src/ && php-cs-fixer fix $1",
+    "cs": "phpcs --standard=phpcs.xml --colors src/",
+    "analyse": "phpstan analyse --memory-limit 200M -l 0 -c phpstan.neon ./src"
+  }, 
+  "autoload": {
+    "files": [
+      "src/helpers.php"
+    ],
+    "psr-4": {
+      "Tusimo\\ClientAble\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+        "Tusimo\\Test\\": "./test/"
+    }
+  }
+}
