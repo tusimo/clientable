@@ -7,7 +7,7 @@ declare(strict_types=1);
  *
  * Please follow the code rules : PSR-2
  */
-use Tusimo\Clientable\Api;
+use Tusimo\ClientAble\Api;
 
 function api(string $service, string $resource)
 {

@@ -9,6 +9,8 @@ declare(strict_types=1);
  */
 namespace Tusimo\Test\Cases;
 
+use Tusimo\ClientAble\Api;
+use Tusimo\ClientAble\Service;
 use PHPUnit\Framework\TestCase;
 
 /**

@@ -7,7 +7,7 @@ declare(strict_types=1);
  *
  * Please follow the code rules : PSR-2
  */
-namespace Tusimo\Clientable;
+namespace Tusimo\ClientAble;
 
 use Tusimo\Restable\Query;
 use Illuminate\Contracts\Support\Arrayable;
@@ -154,7 +154,7 @@ class Api extends Query
      *
      * @param array|int|string $id
      *
-     * @return ResourceCollection|?\Tusimo\Clientable\Resource
+     * @return ResourceCollection|?\Tusimo\ClientAble\Resource
      */
     public function find($id)
     {
@@ -180,7 +180,7 @@ class Api extends Query
     /**
      * Get first Resource match the query.
      *
-     * @return ?\Tusimo\Clientable\Resource
+     * @return ?\Tusimo\ClientAble\Resource
      */
     public function first()
     {
@@ -223,8 +223,8 @@ class Api extends Query
     /**
      * Create a resource.
      *
-     * @param array|Arrayable|\Tusimo\Clientable\Resource $resource
-     * @return \Tusimo\Clientable\Resource
+     * @param array|Arrayable|\Tusimo\ClientAble\Resource $resource
+     * @return \Tusimo\ClientAble\Resource
      */
     public function create($resource)
     {
@@ -238,8 +238,8 @@ class Api extends Query
     /**
      * Create many resources.
      *
-     * @param array|Arrayable|\Tusimo\Clientable\ResourceCollection $resources
-     * @return \Tusimo\Clientable\ResourceCollection
+     * @param array|Arrayable|\Tusimo\ClientAble\ResourceCollection $resources
+     * @return \Tusimo\ClientAble\ResourceCollection
      */
     public function createMany($resources)
     {
@@ -254,7 +254,7 @@ class Api extends Query
      * Update a Resource.
      *
      * @param mixed $id
-     * @param array|Arrayable|\Tusimo\Clientable\Resource $resources
+     * @param array|Arrayable|\Tusimo\ClientAble\Resource $resources
      */
     public function update($id, $resources)
     {
@@ -268,7 +268,7 @@ class Api extends Query
     /**
      * Undocumented function.
      *
-     * @param array|Arrayable|\Tusimo\Clientable\Resource $resources
+     * @param array|Arrayable|\Tusimo\ClientAble\Resource $resources
      */
     public function updateMany($resources)
     {

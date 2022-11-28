@@ -7,7 +7,7 @@ declare(strict_types=1);
  *
  * Please follow the code rules : PSR-2
  */
-namespace Tusimo\Clientable;
+namespace Tusimo\ClientAble;
 
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ResponseInterface;
@@ -127,7 +127,7 @@ class ApiResponse
     /**
      * Undocumented function.
      *
-     * @return null|\Tusimo\Clientable\Resource
+     * @return null|\Tusimo\ClientAble\Resource
      */
     public function toResource()
     {
@@ -225,7 +225,7 @@ class ApiResponse
     /**
      * Undocumented function.
      *
-     * @return \Tusimo\Clientable\Resource
+     * @return \Tusimo\ClientAble\Resource
      */
     protected function makeResource(array $data)
     {

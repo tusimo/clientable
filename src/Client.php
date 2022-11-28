@@ -7,7 +7,7 @@ declare(strict_types=1);
  *
  * Please follow the code rules : PSR-2
  */
-namespace Tusimo\Clientable;
+namespace Tusimo\ClientAble;
 
 use GuzzleHttp\Client as GuzzleClient;
 use Psr\Http\Message\ResponseInterface;

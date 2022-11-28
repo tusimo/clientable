@@ -7,7 +7,7 @@ declare(strict_types=1);
  *
  * Please follow the code rules : PSR-2
  */
-namespace Tusimo\Clientable;
+namespace Tusimo\ClientAble;
 
 /**
  * @deprecated only for v1 use purpose
