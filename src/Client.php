@@ -9,7 +9,6 @@ declare(strict_types=1);
  */
 namespace Tusimo\Clientable;
 
-use Exception;
 use GuzzleHttp\Client as GuzzleClient;
 use Psr\Http\Message\ResponseInterface;
 
@@ -72,7 +71,7 @@ class Client
             }
             return $result;
         }
-        throw new Exception('unsupported method call:' . $method);
+        throw new \Exception('unsupported method call:' . $method);
     }
 
     /**
@@ -237,8 +236,8 @@ class Client
             'headers' => $this->getHeaders() + [
                 'Content-Type' => 'application/json',
                 'Accept' => 'application/json',
-                'User-Agent' => 'melo.api.client v1.0',
-                'Authorization' => 'e12f91a863eae313ae6ed20859f61720',
+                'User-Agent' => 'api.client v1.0',
+                'Authorization' => 'b9ddbadb4ebbf06110b93d98adb1497c',
             ],
         ];
     }
