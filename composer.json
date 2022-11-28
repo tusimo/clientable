@@ -9,7 +9,7 @@
   "prefer-stable": true,
   "require": {
     "php": "^7|^8",
-    "tusimo/restable": "dev-master",
+    "tusimo/restable": "^1.0",
     "guzzlehttp/guzzle": "^6|^7",
     "illuminate/support": "^6|^7|^8|^9",
     "illuminate/pagination": "^6|^7|^8|^9"
