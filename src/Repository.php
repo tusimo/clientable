@@ -9,7 +9,6 @@ declare(strict_types=1);
  */
 namespace Tusimo\ClientAble;
 
-use Exception;
 use Tusimo\Restable\Query;
 use GuzzleHttp\Psr7\Response;
 use Tusimo\Restable\QuerySelect;
@@ -67,7 +66,7 @@ class Repository
             }
             return $result;
         }
-        throw new Exception('unsupported method call:' . $method);
+        throw new \Exception('unsupported method call:' . $method);
     }
 
     /**
@@ -381,11 +380,8 @@ class Repository
                 $response = new Response(500, $this->getHeaders(), $e->getMessage());
             }
         } catch (ConnectException $e) {
-            $response = $e->getResponse();
-            if (is_null($response)) {
-                $response = new Response(500, $this->getHeaders(), $e->getMessage());
-            }
-        } catch (Exception $e) {
+            $response = new Response(500, $this->getHeaders(), $e->getMessage());
+        } catch (\Exception $e) {
             $data = json_encode([
                 'code' => 400,
                 'msg' => $e->getMessage(),

@@ -247,7 +247,7 @@ class Client
      *
      * @return GuzzleClient
      */
-    protected function getClient()
+    public function getClient()
     {
         if (is_null($this->client)) {
             $this->client = new GuzzleClient($this->getClientRequestOptions());
