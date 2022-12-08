@@ -120,7 +120,6 @@ class Repository
      */
     public function get($id, array $select = [], array $with = []): ApiResponse
     {
-        $options = $this->getClient()->getClientRequestOptions();
         $uri = "{$this->getApiVersion()}/{$this->getResourceName()}/{$id}";
         $query = new Query();
         $queryString = $query->select($this->parseSelect($select))
@@ -128,7 +127,7 @@ class Repository
             ->toUriQueryString($this->getVersion());
 
         $uri .= '?' . $queryString;
-        return $this->request('GET', $uri, $options);
+        return $this->request('GET', $uri);
     }
 
     /**
@@ -138,7 +137,6 @@ class Repository
     {
         $this->throwExceptionIfNotSupported();
 
-        $options = $this->getClient()->getClientRequestOptions();
         $idsString = implode(',', $ids);
         $uri = "{$this->getApiVersion()}/{$this->getResourceName()}/{$idsString}/_batch";
         $query = new Query();
@@ -147,7 +145,7 @@ class Repository
             ->toUriQueryString($this->getVersion());
 
         $uri .= '?' . $queryString;
-        return $this->request('GET', $uri, $options);
+        return $this->request('GET', $uri);
     }
 
     /**
@@ -155,10 +153,9 @@ class Repository
      */
     public function add(array $resource): ApiResponse
     {
-        $options = $this->getClient()->getClientRequestOptions();
         $uri = "{$this->getApiVersion()}/{$this->getResourceName()}";
         $options['json'] = $resource;
-        return $this->request('POST', $uri, $options);
+        return $this->request('POST', $uri);
     }
 
     /**
@@ -168,7 +165,6 @@ class Repository
     {
         $this->throwExceptionIfNotSupported();
 
-        $options = $this->getClient()->getClientRequestOptions();
         $uri = "{$this->getApiVersion()}/{$this->getResourceName()}/_batch";
         $options['json'] = $resources;
         return $this->request('POST', $uri, $options);
@@ -181,7 +177,6 @@ class Repository
      */
     public function update($id, array $resource): ApiResponse
     {
-        $options = $this->getClient()->getClientRequestOptions();
         $uri = "{$this->getApiVersion()}/{$this->getResourceName()}/{$id}";
         $options['json'] = $resource;
         return $this->request('PUT', $uri, $options);
@@ -194,7 +189,6 @@ class Repository
     {
         $this->throwExceptionIfNotSupported();
 
-        $options = $this->getClient()->getClientRequestOptions();
         $uri = "{$this->getApiVersion()}/{$this->getResourceName()}/_batch";
         $options['json'] = $resources;
         return $this->request('PUT', $uri, $options);
@@ -207,9 +201,8 @@ class Repository
      */
     public function delete($id): ApiResponse
     {
-        $options = $this->getClient()->getClientRequestOptions();
         $uri = "{$this->getApiVersion()}/{$this->getResourceName()}/{$id}";
-        return $this->request('DELETE', $uri, $options);
+        return $this->request('DELETE', $uri);
     }
 
     /**
@@ -219,10 +212,9 @@ class Repository
     {
         $this->throwExceptionIfNotSupported();
 
-        $options = $this->getClient()->getClientRequestOptions();
         $idsString = implode(',', $ids);
         $uri = "{$this->getApiVersion()}/{$this->getResourceName()}/{$idsString}/_batch";
-        return $this->request('DELETE', $uri, $options);
+        return $this->request('DELETE', $uri);
     }
 
     /**
@@ -231,11 +223,10 @@ class Repository
     public function list(Query $query): ApiResponse
     {
         $query = $this->parseQuery($query);
-        $options = $this->getClient()->getClientRequestOptions();
         $path = "{$this->getApiVersion()}/{$this->getResourceName()}";
         $queryString = $query->toUriQueryString($this->getVersion());
         $uri = $path . '?' . $queryString;
-        return $this->request('GET', $uri, $options);
+        return $this->request('GET', $uri);
     }
 
     /**
@@ -245,11 +236,10 @@ class Repository
     {
         $query = $this->parseQuery($query);
 
-        $options = $this->getClient()->getClientRequestOptions();
         $path = "{$this->getApiVersion()}/{$this->getResourceName()}/_batch";
         $queryString = $query->toUriQueryString($this->getVersion());
         $uri = $path . '?' . $queryString;
-        return $this->request('GET', $uri, $options);
+        return $this->request('GET', $uri);
     }
 
     /**
@@ -267,11 +257,10 @@ class Repository
     {
         $query = $this->parseQuery($query);
 
-        $options = $this->getClientRequestOptions();
         $path = "{$this->getApiVersion()}/{$this->getResourceName()}/_aggregate";
         $queryString = $query->toUriQueryString($this->getVersion());
         $uri = $path . '?' . $queryString;
-        return $this->request('GET', $uri, $options);
+        return $this->request('GET', $uri);
     }
 
     /**
@@ -282,6 +271,16 @@ class Repository
         if (is_null($this->client)) {
             $this->client = new Client();
         }
+
+        return $this->client;
+    }
+
+    /**
+     * Get the value of client.
+     */
+    public function newClient()
+    {
+        $this->client = new Client();
 
         return $this->client;
     }
@@ -367,11 +366,11 @@ class Repository
     /**
      * send the request.
      */
-    protected function request(string $method, string $uri, array $options): ApiResponse
+    protected function request(string $method, string $uri, array $options = []): ApiResponse
     {
         try {
             $response = $this->getClient()
-                ->request($method, $uri, $options);
+                ->restRequest($method, $uri, $options);
         } catch (BadResponseException $e) {
             $response = $e->getResponse();
         } catch (RequestException $e) {

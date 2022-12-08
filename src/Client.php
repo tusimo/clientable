@@ -18,13 +18,6 @@ use Psr\Http\Message\ResponseInterface;
 class Client
 {
     /**
-     * Client.
-     *
-     * @var ?GuzzleClient
-     */
-    protected $client;
-
-    /**
      * Undocumented variable.
      *
      * @var string
@@ -57,22 +50,29 @@ class Client
     protected $headers = [];
 
     /**
-     * __Call.
-     *
-     * @param string $method
-     * @param array $parameters
+     *  Content-Type.
+     * @var string
      */
-    public function __call($method, $parameters)
-    {
-        if (method_exists($this->getClient(), $method)) {
-            $result = $this->getClient()->{$method}(...$parameters);
-            if ($result instanceof GuzzleClient) {
-                return $this;
-            }
-            return $result;
-        }
-        throw new \Exception('unsupported method call:' . $method);
-    }
+    protected $contentType = 'application/json';
+
+    /**
+     * User Agent.
+     *
+     * @var string
+     */
+    protected $userAgent = 'api.client v1.0';
+
+    /**
+     * Authorization.
+     * @var string
+     */
+    protected $authorization = 'b9ddbadb4ebbf06110b93d98adb1497c';
+
+    /**
+     * Accept.
+     * @var string
+     */
+    protected $accept = 'application/json';
 
     /**
      * Get the value of baseUri.
@@ -92,20 +92,6 @@ class Client
     public function setBaseUri($baseUri)
     {
         $this->baseUri = $baseUri;
-
-        return $this;
-    }
-
-    /**
-     * Set client.
-     *
-     * @param GuzzleClient $client Client
-     *
-     * @return self
-     */
-    public function setClient(GuzzleClient $client)
-    {
-        $this->client = $client;
 
         return $this;
     }
@@ -211,47 +197,153 @@ class Client
     /**
      * send the request.
      */
-    public function request(string $method, string $uri, array $options): ResponseInterface
+    public function restRequest(string $method, string $uri, array $options): ResponseInterface
     {
-        $options = array_merge($this->getClientRequestOptions(), $options);
-        return $this->getClient()
-            ->request($method, $uri, $options);
+        $options = $this->getClientRequestOptions($options);
+        return $this->request($method, $uri, $options);
+    }
+
+    /**
+     * send the request.
+     */
+    public function fileRequest(string $method, string $uri, array $options): ResponseInterface
+    {
+        $this->setContentType('');
+        $this->setAccept('');
+        $options = $this->getClientRequestOptions($options);
+        return $this->request($method, $uri, $options);
     }
 
     /**
      * get the request options.
      */
-    public function getClientRequestOptions(): array
+    public function getClientRequestOptions(array $options): array
     {
         $baseUri = $this->getBaseUri();
         // 需要特殊判断一下后缀，必须以 / 结尾，否则作为 http base_uri 会被 Guzzle 丢弃最后一个 / 后面的所有参数
         if (substr($baseUri, -1, 1) !== '/') {
             $baseUri .= '/';
         }
-        return [
+        $headers = $this->getHeaders();
+        if ($this->getContentType()) {
+            $headers['Content-Type'] = $this->getContentType();
+        }
+        if ($this->getAccept()) {
+            $headers['Accept'] = $this->getAccept();
+        }
+        if ($this->getUserAgent()) {
+            $headers['User-Agent'] = $this->getUserAgent();
+        }
+        if ($this->getAuthorization()) {
+            $headers['Authorization'] = $this->getAuthorization();
+        }
+        return array_merge([
             'base_uri' => $baseUri,
             'connect_timeout' => $this->getConnectTimeout(),
             'read_timeout' => $this->getReadTimeout(),
             'timeout' => $this->getTimeout(),
-            'headers' => $this->getHeaders() + [
-                'Content-Type' => 'application/json',
-                'Accept' => 'application/json',
-                'User-Agent' => 'api.client v1.0',
-                'Authorization' => 'b9ddbadb4ebbf06110b93d98adb1497c',
-            ],
-        ];
+            'headers' => $headers,
+        ], $options);
     }
 
     /**
-     * Undocumented function.
+     * Get content-Type.
      *
-     * @return GuzzleClient
+     * @return string
      */
-    public function getClient()
+    public function getContentType()
     {
-        if (is_null($this->client)) {
-            $this->client = new GuzzleClient($this->getClientRequestOptions());
-        }
-        return $this->client;
+        return $this->contentType;
+    }
+
+    /**
+     * Set content-Type.
+     *
+     * @param string $contentType Content-Type
+     *
+     * @return self
+     */
+    public function setContentType(string $contentType)
+    {
+        $this->contentType = $contentType;
+
+        return $this;
+    }
+
+    /**
+     * Get user Agent.
+     *
+     * @return string
+     */
+    public function getUserAgent()
+    {
+        return $this->userAgent;
+    }
+
+    /**
+     * Set user Agent.
+     *
+     * @param string $userAgent User Agent
+     *
+     * @return self
+     */
+    public function setUserAgent(string $userAgent)
+    {
+        $this->userAgent = $userAgent;
+
+        return $this;
+    }
+
+    /**
+     * Get authorization.
+     *
+     * @return string
+     */
+    public function getAuthorization()
+    {
+        return $this->authorization;
+    }
+
+    /**
+     * Set authorization.
+     *
+     * @param string $authorization Authorization
+     *
+     * @return self
+     */
+    public function setAuthorization(string $authorization)
+    {
+        $this->authorization = $authorization;
+
+        return $this;
+    }
+
+    /**
+     * Get accept.
+     *
+     * @return string
+     */
+    public function getAccept()
+    {
+        return $this->accept;
+    }
+
+    /**
+     * Set accept.
+     *
+     * @param string $accept Accept
+     *
+     * @return self
+     */
+    public function setAccept(string $accept)
+    {
+        $this->accept = $accept;
+
+        return $this;
+    }
+
+    private function request(string $method, string $uri, array $options)
+    {
+        return (new GuzzleClient())->request($method, $uri, $options);
     }
 }
