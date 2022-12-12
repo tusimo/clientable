@@ -155,7 +155,7 @@ class Repository
     {
         $uri = "{$this->getApiVersion()}/{$this->getResourceName()}";
         $options['json'] = $resource;
-        return $this->request('POST', $uri);
+        return $this->request('POST', $uri, $options);
     }
 
     /**
