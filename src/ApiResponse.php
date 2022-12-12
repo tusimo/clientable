@@ -160,7 +160,7 @@ class ApiResponse
             $paginator['current_page'] = $paginator['current_page'] ?? $paginator['page'];
         } else {
             $data = $this->getData();
-            $paginator = $this->getMeta()['pagination'] ?? [];
+            $paginator = $this->getMeta()['paginator'] ?? [];
         }
         $data = $this->makeResourceCollection($data);
         return new LengthAwarePaginator(
