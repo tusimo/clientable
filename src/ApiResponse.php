@@ -11,6 +11,7 @@ namespace Tusimo\ClientAble;
 
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ResponseInterface;
+use Illuminate\Pagination\CursorPaginator;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class ApiResponse
@@ -168,6 +169,26 @@ class ApiResponse
             $paginator['total'] ?? 0,
             $paginator['per_page'] ?? 10,
             $paginator['current_page'] ?? 1,
+            [
+                'path' => $paginator['path'] ?? '',
+            ]
+        );
+    }
+
+    /**
+     * Undocumented function.
+     *
+     * @return CursorPaginator
+     */
+    public function toCursorPaginator()
+    {
+        $data = $this->getData();
+        $paginator = $this->getMeta()['cursor_paginator'] ?? [];
+        $data = $this->makeResourceCollection($data);
+        return new CursorPaginator(
+            $data,
+            $paginator['per_page'] ?? 10,
+            $paginator['cursor'] ?? '',
             [
                 'path' => $paginator['path'] ?? '',
             ]

@@ -7,11 +7,9 @@ declare(strict_types=1);
  *
  * Please follow the code rules : PSR-2
  */
-namespace Tusimo\ClientAble;
+namespace Tusimo\ClientAble\Contract;
 
-use Tusimo\ClientAble\Concern\Repository\HasResource;
-
-class Repository
+interface HeaderResolverContract
 {
-    use HasResource;
+    public function getHeaders(): array;
 }
