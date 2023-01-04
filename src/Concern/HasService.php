@@ -40,7 +40,7 @@ trait HasService
             }
             return $response;
         }
-        throw new \Exception('call to undefined method in class api');
+        throw new \Exception('call to undefined method in class api:' . $method . json_encode($parameters));
     }
 
     public function getRepository(): Repository

@@ -87,6 +87,16 @@ trait HasQueryHelper
     }
 
     /**
+     * @param $column
+     * @param $key
+     * @return ResourceCollection
+     */
+    public function pluck($column, $key)
+    {
+        return $this->select([$column, $key])->get()->pluck($column, $key);
+    }
+
+    /**
      * Undocumented function.
      *
      * @return LengthAwarePaginator
@@ -120,7 +130,10 @@ trait HasQueryHelper
             $resource = $resource->toArray();
         }
         $response = $this->getRepository()->add($resource);
-        return $response->toResource();
+        if ($response->isServiceSuccess()) {
+            return $response->toResource();
+        }
+        throw $response->toApiException();
     }
 
     /**
@@ -135,7 +148,10 @@ trait HasQueryHelper
             $resources = $resources->toArray();
         }
         $response = $this->getRepository()->batchAdd($resources);
-        return $response->toResourceCollection();
+        if ($response->isServiceSuccess()) {
+            return $response->toResourceCollection();
+        }
+        throw $response->toApiException();
     }
 
     /**
@@ -150,7 +166,10 @@ trait HasQueryHelper
             $resources = $resources->toArray();
         }
         $response = $this->getRepository()->update($id, $resources);
-        return $response->toResource();
+        if ($response->isServiceSuccess()) {
+            return $response->toResource();
+        }
+        throw $response->toApiException();
     }
 
     /**
@@ -164,8 +183,11 @@ trait HasQueryHelper
             $resources = $resources->toArray();
         }
         $response = $this->getRepository()->batchUpdate($resources);
-        return $response->toResourceCollection();
-    }
+        $response = $this->getRepository()->batchAdd($resources);
+        if ($response->isServiceSuccess()) {
+            return $response->toResourceCollection();
+        }
+        throw $response->toApiException();    }
 
     /**
      * Destroy resource with resource id or ids.
@@ -178,9 +200,12 @@ trait HasQueryHelper
             $ids = $ids->toArray();
         }
         if (is_array($ids)) {
-            $this->getRepository()->deleteByIds($ids);
+            $response = $this->getRepository()->deleteByIds($ids);
         } else {
-            $this->getRepository()->delete($ids);
+            $response = $this->getRepository()->delete($ids);
+        }
+        if (!$response->isServiceSuccess()) {
+            throw $response->toApiException();
         }
     }
 

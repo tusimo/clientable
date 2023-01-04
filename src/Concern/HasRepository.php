@@ -84,6 +84,11 @@ trait HasRepository
      */
     protected $select = [];
 
+    public function resource($resource)
+    {
+        return $this->setResource($resource);
+    }
+
     /**
      * Get the value of resourceName.
      * @return string
@@ -291,11 +296,17 @@ trait HasRepository
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getService(): string
     {
         return $this->service;
     }
 
+    /**
+     * @param string $service
+     */
     public function setService(string $service)
     {
         $this->service = $service;
